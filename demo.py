@@ -33,18 +33,34 @@ def tra_loi_AI_lich_su(cau_hoi: str):
 # ======================
 history_keywords = [
     "lịch sử", "chiến tranh", "khởi nghĩa", "cách mạng", 
-    "triều đại", "vua", "thế chiến", "cổ đại", "trung đại",
-    "hiện đại", "di tích", "danh lam", "quân", "trận", "đế quốc", "là ai", "bác Hồ", "Hồ Chí Minh"
+    "triều đại", "vua", "hoàng đế", "thế chiến", "thời kỳ",
+    "cổ đại", "trung đại", "hiện đại", "di tích", "danh lam",
+    "quân đội", "trận", "đế quốc", "chiến dịch", "anh hùng",
+    "là ai", "ai là", "nhân vật", "bác hồ", "hồ chí minh",
+    "trưng trắc", "trưng nhị", "ngô quyền", "lý thái tổ",
+    "lê lợi", "trần hưng đạo"
 ]
 
 # ======================
 # 🧠 HÀM KIỂM TRA CÂU HỎI
 # ======================
 def is_history_question(question):
-    q = question.lower()
+    q = question.lower().strip()
+
+    # Nếu câu hỏi chứa tên nhân vật → chắc chắn là lịch sử
+    for key in lich_su_data.keys():
+        if key in q:
+            return True
+
+    # Nếu dạng câu hỏi "ai là"
+    if "là ai" in q or q.startswith("ai là") or "ai được" in q:
+        return True
+
+    # Kiểm tra từ khóa
     for kw in history_keywords:
         if kw in q:
             return True
+
     return False
 
 # ======================
