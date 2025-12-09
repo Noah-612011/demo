@@ -6,7 +6,11 @@ import streamlit.components.v1 as components
 from transformers import pipeline
 
 # Load mô hình AI miễn phí
-nlp = pipeline("text2text-generation", model="google/flan-t5-small")
+nlp = pipeline(
+    "text2text-generation",
+    model="VietAI/vit5-base",
+    tokenizer="VietAI/vit5-base"
+)
 
 def tra_loi_AI_lich_su(cau_hoi: str):
     prompt = (
