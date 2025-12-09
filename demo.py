@@ -3,6 +3,17 @@ from gtts import gTTS
 from io import BytesIO
 import base64
 import streamlit.components.v1 as components
+from transformers import pipeline
+
+# Load mô hình AI miễn phí
+nlp = pipeline("text-generation",model="vinal/PhoGPT-4B_Chat",device_map="auto")
+def tra_loi_AI_lich_su(cau_hoi: str):prompt = f"Bạn là trợ lý chuyên về lịch sử Việt Nam. Hãy trả lời ngắn gọn:\nCâu hỏi: {cau_hoi}\nTrả lời:"try:
+    output = nlp(prompt,max_lenghth=200, do_sample=True,temperature=0,7)
+    return output[0]
+    ["generated_text"].split("Trả lời:")
+    [-1].strip()
+    except:
+        return " AI gặp lỗi khi trả lời."
 
 # ======================
 # 🔍 TỪ KHÓA LỊCH SỬ
@@ -94,7 +105,7 @@ if st.button("📖 Trả lời"):
         st.error("❗ Tôi chỉ trả lời câu hỏi về lịch sử. Hãy thử hỏi lại nhé!")
         st.stop()
 
-    tra_loi = tra_loi_lich_su(cau_hoi)
+    tra_loi = tra_loi_AI_lich_su(cau_hoi)
     st.success(tra_loi)
 
     # Tạo giọng nói
