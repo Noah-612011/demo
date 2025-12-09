@@ -34,7 +34,7 @@ def tra_loi_AI_lich_su(cau_hoi: str):
 history_keywords = [
     "lịch sử", "chiến tranh", "khởi nghĩa", "cách mạng", 
     "triều đại", "vua", "thế chiến", "cổ đại", "trung đại",
-    "hiện đại", "di tích", "danh lam", "quân", "trận", "đế quốc", là ai"
+    "hiện đại", "di tích", "danh lam", "quân", "trận", "đế quốc", "là ai", "bác Hồ", "Hồ Chí Minh"
 ]
 
 # ======================
