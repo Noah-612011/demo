@@ -6,14 +6,27 @@ import streamlit.components.v1 as components
 from transformers import pipeline
 
 # Load mô hình AI miễn phí
-nlp = pipeline("text-generation",model="vinal/PhoGPT-4B_Chat",device_map="auto")
-def tra_loi_AI_lich_su(cau_hoi: str):prompt = f"Bạn là trợ lý chuyên về lịch sử Việt Nam. Hãy trả lời ngắn gọn:\nCâu hỏi: {cau_hoi}\nTrả lời:"try:
-    output = nlp(prompt,max_lenghth=200, do_sample=True,temperature=0,7)
-    return output[0]
-    ["generated_text"].split("Trả lời:")
-    [-1].strip()
-    except:
-        return " AI gặp lỗi khi trả lời."
+nlp = pipeline("text-generation", model="vinai/PhoGPT-4B-Chat", device_map="auto")
+
+def tra_loi_AI_lich_su(cau_hoi: str):
+    prompt = (
+        "Bạn là trợ lý chuyên về lịch sử Việt Nam. "
+        "Hãy trả lời ngắn gọn, chính xác và không nói lan man.\n"
+        f"Câu hỏi: {cau_hoi}\nTrả lời:"
+    )
+
+    try:
+        output = nlp(
+            prompt,
+            max_length=200,
+            do_sample=True,
+            temperature=0.7
+        )
+        full_text = output[0]["generated_text"]
+        return full_text.split("Trả lời:")[-1].strip()
+
+    except Exception as e:
+        return f"AI gặp lỗi: {e}"
 
 # ======================
 # 🔍 TỪ KHÓA LỊCH SỬ
