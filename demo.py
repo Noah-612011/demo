@@ -3,14 +3,10 @@ from gtts import gTTS
 from io import BytesIO
 import base64
 import streamlit.components.v1 as components
-from transformers import pipeline
+from openai import OpenAI
 
-# Load mô hình AI miễn phí
-nlp = pipeline(
-    "text2text-generation",
-    model="VietAI/vit5-base",
-    tokenizer="VietAI/vit5-base"
-)
+# ====== DÙNG API KEY TỪ STREAMLIT SECRETS ======
+client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
 
 def tra_loi_AI_lich_su(cau_hoi: str):
     prompt = (
@@ -18,53 +14,31 @@ def tra_loi_AI_lich_su(cau_hoi: str):
         "Hãy trả lời ngắn gọn, chính xác và không nói lan man.\n"
         f"Câu hỏi: {cau_hoi}\nTrả lời:"
     )
-
     try:
-        output = nlp(
-            prompt,
-            max_length=200,
-            do_sample=True,
-            temperature=0.7
+        completion = client.responses.create(
+            model="gpt-4o-mini",
+            input=prompt
         )
-        full_text = output[0]["generated_text"]
-        return full_text.split("Trả lời:")[-1].strip()
-
+        return completion.output_text
     except Exception as e:
         return f"AI gặp lỗi: {e}"
+
 
 # ======================
 # 🔍 TỪ KHÓA LỊCH SỬ
 # ======================
 history_keywords = [
-    "lịch sử", "chiến tranh", "khởi nghĩa", "cách mạng", 
-    "triều đại", "vua", "hoàng đế", "thế chiến", "thời kỳ",
-    "cổ đại", "trung đại", "hiện đại", "di tích", "danh lam",
-    "quân đội", "trận", "đế quốc", "chiến dịch", "anh hùng",
-    "là ai", "ai là", "nhân vật", "bác hồ", "hồ chí minh",
-    "trưng trắc", "trưng nhị", "ngô quyền", "lý thái tổ",
-    "lê lợi", "trần hưng đạo"
+    "lịch sử", "chiến tranh", "khởi nghĩa", "cách mạng",
+    "triều đại", "vua", "thế chiến", "cổ đại", "trung đại",
+    "hiện đại", "di tích", "danh lam", "quân", "trận", 
+    "đế quốc", "là ai", "bác hồ", "hồ chí minh"
 ]
 
-# ======================
-# 🧠 HÀM KIỂM TRA CÂU HỎI
-# ======================
 def is_history_question(question):
-    q = question.lower().strip()
-
-    # Nếu câu hỏi chứa tên nhân vật → chắc chắn là lịch sử
-    for key in lich_su_data.keys():
-        if key in q:
-            return True
-
-    # Nếu dạng câu hỏi "ai là"
-    if "là ai" in q or q.startswith("ai là") or "ai được" in q:
-        return True
-
-    # Kiểm tra từ khóa
+    q = question.lower()
     for kw in history_keywords:
         if kw in q:
             return True
-
     return False
 
 # ======================
@@ -72,9 +46,6 @@ def is_history_question(question):
 # ======================
 st.set_page_config(page_title="Trợ lý Lịch sử Việt Nam", layout="centered")
 
-# ======================
-# 🧠 KHỞI TẠO TRẠNG THÁI
-# ======================
 if "audio_unlocked" not in st.session_state:
     st.session_state["audio_unlocked"] = False
 
@@ -106,8 +77,9 @@ if st.button("🔊 BẬT ÂM THANH (1 lần)"):
     st.session_state["audio_unlocked"] = True
     st.success("Âm thanh đã mở khoá!")
 
+
 # ======================
-# 📜 DỮ LIỆU LỊCH SỬ
+# 📜 DỮ LIỆU LỊCH SỬ CƠ BẢN
 # ======================
 lich_su_data = {
     "trưng trắc": "Hai Bà Trưng khởi nghĩa chống quân Hán năm 40 sau Công Nguyên.",
@@ -124,7 +96,8 @@ def tra_loi_lich_su(cau_hoi: str):
     for key, value in lich_su_data.items():
         if key in cau_hoi:
             return value
-    return "Xin lỗi, tôi chưa có thông tin về câu hỏi này."
+    return None  # Không trả lời → dùng AI
+
 
 # ======================
 # 💬 GIAO DIỆN
@@ -138,21 +111,24 @@ if st.button("📖 Trả lời"):
         st.error("❗ Tôi chỉ trả lời câu hỏi về lịch sử. Hãy thử hỏi lại nhé!")
         st.stop()
 
-    tra_loi = tra_loi_AI_lich_su(cau_hoi)
+    # Ưu tiên dữ liệu có sẵn
+    tra_loi = tra_loi_lich_su(cau_hoi)
+
+    if tra_loi is None:
+        tra_loi = tra_loi_AI_lich_su(cau_hoi)
+
     st.success(tra_loi)
 
-    # Tạo giọng nói
+    # TTS
     try:
         mp3_fp = BytesIO()
         gTTS(text=tra_loi, lang="vi").write_to_fp(mp3_fp)
         mp3_fp.seek(0)
         audio_b64 = base64.b64encode(mp3_fp.read()).decode()
-
-    except Exception as e:
+    except:
         st.error("Lỗi tạo giọng nói.")
         audio_b64 = None
 
-    # Phát âm thanh
     if audio_b64:
         unlocked = "true" if st.session_state["audio_unlocked"] else "false"
 
@@ -176,8 +152,3 @@ if st.button("📖 Trả lời"):
         </script>
         """
         components.html(audio_html, height=120)
-
-        if st.session_state["audio_unlocked"]:
-            st.info("🔊 Tự động phát (Android/PC).")
-        else:
-            st.warning("⚠️ iPhone phải bấm ▶.")
