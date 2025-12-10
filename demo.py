@@ -31,7 +31,7 @@ history_keywords = [
     "lịch sử", "chiến tranh", "khởi nghĩa", "cách mạng",
     "triều đại", "vua", "thế chiến", "cổ đại", "trung đại",
     "hiện đại", "di tích", "danh lam", "quân", "trận", 
-    "đế quốc", "là ai", "bác hồ", "hồ chí minh"
+    "đế quốc", "là ai", "bác hồ", "hồ chí minh", "nạn đói", "thế giới"
 ]
 
 def is_history_question(question):
