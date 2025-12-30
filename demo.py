@@ -314,27 +314,6 @@ if st.button("🔊 BẬT ÂM THANH (1 lần)"):
 
 
 # ======================
-# 📜 DỮ LIỆU LỊCH SỬ CƠ BẢN
-# ======================
-lich_su_data = {
-    "trưng trắc": "Hai Bà Trưng khởi nghĩa chống quân Hán năm 40 sau Công Nguyên.",
-    "ngô quyền": "Ngô Quyền đánh bại quân Nam Hán trên sông Bạch Đằng năm 938.",
-    "lý thái tổ": "Năm 1010, Lý Thái Tổ dời đô về Thăng Long.",
-    "trần hưng đạo": "Trần Hưng Đạo ba lần đánh bại quân Nguyên – Mông.",
-    "lê lợi": "Lê Lợi lãnh đạo khởi nghĩa Lam Sơn và giành độc lập năm 1428."
-}
-
-def tra_loi_lich_su(cau_hoi: str):
-    if not cau_hoi:
-        return "Vui lòng nhập câu hỏi."
-    cau_hoi = cau_hoi.lower()
-    for key, value in lich_su_data.items():
-        if key in cau_hoi:
-            return value
-    return None  # Không trả lời → dùng AI
-
-
-# ======================
 # 💬 GIAO DIỆN
 # ======================
 if st.session_state.page == "ask":
