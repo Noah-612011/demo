@@ -5,6 +5,7 @@ import base64
 import streamlit.components.v1 as components
 import json
 from openai import OpenAI
+import random
 def bong_bong_bay():
     st.balloons()
    
@@ -411,6 +412,23 @@ if st.session_state.page == "quiz":
             st.session_state.quiz_data = tao_trac_nghiem_tu_AI(
                 st.session_state.noi_dung_on_tap
             )
+            # 🔀 TRỘN ĐÁP ÁN NGẪU NHIÊN
+        for q in quiz:
+            items = list(q["options"].items())  # [(A, ...), (B, ...)]
+            random.shuffle(items)
+
+            new_options = {}
+            new_answer = None
+
+            for new_key, (old_key, text) in zip(["A","B","C","D"], items):
+                new_options[new_key] = text
+                if old_key == q["answer"]:
+                    new_answer = new_key
+
+            q["options"] = new_options
+            q["answer"] = new_answer
+
+        st.session_state.quiz_data = quiz
         st.session_state.user_answers = {}
         st.session_state.submitted = False
         st.rerun()
