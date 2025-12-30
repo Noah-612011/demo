@@ -485,3 +485,4 @@ if st.session_state.page == "quiz":
             st.session_state.pop("user_answers", None)
             st.session_state.submitted = False
             st.rerun()
+
