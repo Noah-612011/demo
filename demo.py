@@ -101,13 +101,33 @@ def tao_trac_nghiem_tu_AI(noi_dung):
         )
 
         text = res.output_text.strip()
-
-        # 👉 LẤY PHẦN JSON CHO CHẮC
+        
         start = text.find("[")
         end = text.rfind("]") + 1
         json_text = text[start:end]
 
-        return json.loads(json_text)
+        data = json.loads(json_text)   # 👈 LOAD JSON Ở ĐÂY
+        # 👇 RANDOM SAU KHI LOAD
+        for q in data:
+            options = list(q["options"].items())
+            correct_keys = q["answer"]
+            correct_value = q["options"]
+        [correct_key]
+            random.shuffle(options)
+
+            new_optons = {]
+            letters = ["A", "B", "C", "D"]
+
+            for i, (old_k, v) in
+        enumerate(optons):
+                new_options[letters[i]] = v
+                if v == correct_value:
+                    q["answer"] = letters[i]
+
+          q["options"] = new_options
+
+    return data
+                    
 
     except Exception as e:
         st.error("❌ Lỗi tạo câu hỏi trắc nghiệm")
