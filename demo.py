@@ -331,7 +331,6 @@ if st.session_state.page == "ask":
             unsafe_allow_html=True
         )
 
-        tra_loi = tra_loi_lich_su(cau_hoi)
         if tra_loi is None:
             tra_loi = tra_loi_AI_lich_su(cau_hoi)
 
