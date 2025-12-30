@@ -329,13 +329,6 @@ if st.session_state.page == "ask":
         analysis_placeholder.markdown(
             '<div class="analysis-box">📜 Trợ lý lịch sử đang phân tích...</div>',
             unsafe_allow_html=True
-        )
-
-        if tra_loi is None:
-            tra_loi = tra_loi_AI_lich_su(cau_hoi)
-
-        analysis_placeholder.empty()
-        st.success(tra_loi)
 
         # 📌 Ghi nhớ nhanh
         st.markdown("### 📌 Ghi nhớ nhanh")
