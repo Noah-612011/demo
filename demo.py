@@ -14,7 +14,6 @@ if "page" not in st.session_state:
 if "show_bubble" not in st.session_state:
     st.session_state.show_bubble = False
 st.image("https://c2nguyencongtru.chauduc-brvt.edu.vn/upload/62990/20251215/logo_thcs_nguyencongtru_34a39.png", width=120)
-st.write("LOGO ĐÃ LOAD")
 
 # ====== DÙNG API KEY TỪ STREAMLIT SECRETS ======
 client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
