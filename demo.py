@@ -13,7 +13,7 @@ if "page" not in st.session_state:
     st.session_state.page = "ask"
 if "show_bubble" not in st.session_state:
     st.session_state.show_bubble = False
-st.image("logo.png", width=120)
+st.image("https://c2nguyencongtru.chauduc-brvt.edu.vn/upload/62990/20251215/logo_thcs_nguyencongtru_34a39.png", width=120)
 st.write("LOGO ĐÃ LOAD")
 
 # ====== DÙNG API KEY TỪ STREAMLIT SECRETS ======
