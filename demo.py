@@ -13,6 +13,7 @@ if "page" not in st.session_state:
     st.session_state.page = "ask"
 if "show_bubble" not in st.session_state:
     st.session_state.show_bubble = False
+st.image("logo.png", width=120)
 
 # ====== DÙNG API KEY TỪ STREAMLIT SECRETS ======
 client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
