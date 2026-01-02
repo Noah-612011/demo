@@ -5,7 +5,6 @@ import base64
 import streamlit.components.v1 as components
 import json
 from openai import OpenAI
-import random
 def bong_bong_bay():
     st.balloons()
    
@@ -57,7 +56,7 @@ history_keywords = [
     "đế quốc", "là ai", "bác hồ", "hồ chí minh", "nạn đói", "thế giới", 
     "kể tên", "thông tin", "phát xít", "dân chủ", "hậu quả", "mỹ la-tinh", 
     "kinh tế", "hiệp hội", "giặc đói", "chiến dịch", "phong trào", "thắng lợi", "trật tự","xã hội",
-    "thành tựu", "xu thế", "điện biên phủ"
+    "thành tựu", "xu thế", "điện biên phủ", "cột mốc quan trọng", "tóm tắt"
 
 ]
 
@@ -101,33 +100,13 @@ def tao_trac_nghiem_tu_AI(noi_dung):
         )
 
         text = res.output_text.strip()
-        
+
+        # 👉 LẤY PHẦN JSON CHO CHẮC
         start = text.find("[")
         end = text.rfind("]") + 1
         json_text = text[start:end]
 
-        data = json.loads(json_text)   # 👈 LOAD JSON Ở ĐÂY
-        # 👇 RANDOM SAU KHI LOAD
-        for q in data:
-            options = list(q["options"].items())
-            correct_keys = q["answer"]
-            correct_value = q["options"]
-        [correct_key]
-            random.shuffle(options)
-
-            new_optons = {]
-            letters = ["A", "B", "C", "D"]
-
-            for i, (old_k, v) in
-        enumerate(optons):
-                new_options[letters[i]] = v
-                if v == correct_value:
-                    q["answer"] = letters[i]
-
-          q["options"] = new_options
-
-    return data
-                    
+        return json.loads(json_text)
 
     except Exception as e:
         st.error("❌ Lỗi tạo câu hỏi trắc nghiệm")
@@ -432,23 +411,6 @@ if st.session_state.page == "quiz":
             st.session_state.quiz_data = tao_trac_nghiem_tu_AI(
                 st.session_state.noi_dung_on_tap
             )
-            # 🔀 TRỘN ĐÁP ÁN NGẪU NHIÊN
-        for q in quiz:
-            items = list(q["options"].items())  # [(A, ...), (B, ...)]
-            random.shuffle(items)
-
-            new_options = {}
-            new_answer = None
-
-            for new_key, (old_key, text) in zip(["A","B","C","D"], items):
-                new_options[new_key] = text
-                if old_key == q["answer"]:
-                    new_answer = new_key
-
-            q["options"] = new_options
-            q["answer"] = new_answer
-
-        st.session_state.quiz_data = quiz
         st.session_state.user_answers = {}
         st.session_state.submitted = False
         st.rerun()
@@ -458,7 +420,7 @@ if st.session_state.page == "quiz":
 
     # ===== HIỂN THỊ CÂU HỎI =====
     for idx, q in enumerate(st.session_state.quiz_data):
-        st.markdown(f"*Câu {idx+1}: {q['question']}*")
+        st.markdown(f"**Câu {idx+1}: {q['question']}**")
 
         choice = st.radio(
             "",
@@ -497,20 +459,42 @@ if st.session_state.page == "quiz":
 
         st.divider()
 
-        # ===== NỘP BÀI =====
+         # ===== NỘP BÀI =====
     if not st.session_state.submitted:
         if st.button("✅ Nộp bài"):
             st.session_state.submitted = True
-            st.session_state.show_bubble = True   # 🎈 bật bong bóng
+            st.session_state.show_bubble = True
             st.rerun()
     else:
         score = 0
+        st.session_state.wrong_questions = []
+
         for idx, q in enumerate(st.session_state.quiz_data):
             if st.session_state.user_answers.get(idx) == q["answer"]:
-                score += 1
+                score += 10
+            else:
+                st.session_state.wrong_questions.append(q)
 
-        st.success(f"🎉 Bạn đúng {score}/{len(st.session_state.quiz_data)} câu!")
 
+        # Hiển thị kết quả
+        st.success(f"🎉 Bạn đúng {score // 10}/{len(st.session_state.quiz_data)} câu!")
+
+        # Danh hiệu
+        if score == len(st.session_state.quiz_data) * 10:
+            st.success("🏆 DANH HIỆU: NHÀ SỬ HỌC NHÍ")
+            st.balloons()
+        elif score >= 20:
+            st.info("🥈 DANH HIỆU: CHIẾN BINH LỊCH SỬ")
+        else:
+            st.warning("🥉 DANH HIỆU: TẬP SỰ LỊCH SỬ")
+
+        # 📘 NÚT HỌC LẠI PHẦN SAI
+        if st.session_state.wrong_questions:
+            if st.button("📘 Học lại phần làm sai"):
+                st.session_state.page = "review_wrong"
+                st.rerun()
+
+        # 🔙 QUAY LẠI
         if st.button("🔙 Quay lại hỏi bài"):
             st.session_state.page = "ask"
             st.session_state.da_tra_loi = False
@@ -521,6 +505,32 @@ if st.session_state.page == "quiz":
 
             st.session_state.pop("quiz_data", None)
             st.session_state.pop("user_answers", None)
+            st.session_state.pop("wrong_questions", None)
             st.session_state.submitted = False
             st.rerun()
 
+# ======================
+# 📘 TRANG HỌC LẠI PHẦN SAI
+# ======================
+if st.session_state.page == "review_wrong":
+    st.title("📘 Học lại phần làm sai")
+
+    for idx, q in enumerate(st.session_state.wrong_questions):
+        st.markdown(f"### ❌ Câu {idx+1}: {q['question']}")
+
+        correct = q["answer"]
+        st.success(f"✅ Đáp án đúng: {correct}. {q['options'][correct]}")
+        giai_thich = tra_loi_AI_lich_su(
+            f"Vì sao đáp án {correct} là đúng cho câu hỏi: {q['question']}?"
+        )
+        st.info("📌 Giải thích ngắn gọn: " + giai_thich)
+
+    st.divider()
+
+    if st.button("🔙 Quay lại làm bài mới"):
+        st.session_state.page = "ask"
+        st.session_state.pop("quiz_data", None)
+        st.session_state.pop("user_answers", None)
+        st.session_state.pop("wrong_questions", None)
+        st.session_state.submitted = False
+        st.rerun()
