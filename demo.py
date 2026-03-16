@@ -26,7 +26,7 @@ def tra_loi_AI_lich_su(cau_hoi: str):
     )
     try:
         completion = client.responses.create(
-            model="llama3-8b-8192"
+            model="llama3-8b-8192" ,
             input=prompt
         )
         return completion.output_text
