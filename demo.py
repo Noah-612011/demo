@@ -25,7 +25,7 @@ def tra_loi_AI_lich_su(cau_hoi: str):
         f"Câu hỏi: {cau_hoi}\nTrả lời:"
     )
     try:
-        completion = client.responses.create(
+        completion = client.completions.create(
             model="llama3-8b-8192" ,
             input=prompt
         )
