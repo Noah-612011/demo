@@ -4,7 +4,7 @@ from io import BytesIO
 import base64
 import streamlit.components.v1 as components
 import json
-from openai import OpenAI
+from groq import Groq
 def bong_bong_bay():
     st.balloons()
    
@@ -16,7 +16,7 @@ if "show_bubble" not in st.session_state:
 st.image("https://c2nguyencongtru.chauduc-brvt.edu.vn/upload/62990/20251215/logo_thcs_nguyencongtru_34a39.png", width=120)
 
 # ====== DÙNG API KEY TỪ STREAMLIT SECRETS ======
-client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
+client = Groq(api_key=st.secrets["GROQ_API_KEY"])
 
 def tra_loi_AI_lich_su(cau_hoi: str):
     prompt = (
@@ -26,7 +26,7 @@ def tra_loi_AI_lich_su(cau_hoi: str):
     )
     try:
         completion = client.responses.create(
-            model="gpt-4o-mini",
+            model="llama3-8b-8192"
             input=prompt
         )
         return completion.output_text
