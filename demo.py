@@ -39,8 +39,8 @@ def tom_tat_3_y(cau_tra_loi: str):
         f"{cau_tra_loi}"
     )
     try:
-        res = client.responses.create(
-            model="gpt-4o-mini",
+        res = client.chat.completions.create(
+            model="llama3-8b-8192",
             input=prompt
         )
         return res.output_text
