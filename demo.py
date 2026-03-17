@@ -356,7 +356,8 @@ if st.session_state.page == "ask":
             st.error("❗ Tôi chỉ trả lời câu hỏi về lịch sử.")
             st.stop()
             
-        with st.spinner("📜 Trợ lý đang tra cứu lịch sử..."):
+        with st.spinner("📜 Trợ lý đang tra cứu lịch sử...")
+        
         analysis_placeholder = st.empty()
         analysis_placeholder.markdown(
             '<div class="analysis-box">📜 Trợ lý lịch sử đang phân tích...</div>',
