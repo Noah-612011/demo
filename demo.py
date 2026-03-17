@@ -25,14 +25,14 @@ def tra_loi_AI_lich_su(cau_hoi: str):
         f"Câu hỏi: {cau_hoi}\nTrả lời:"
     )
     try:
-        completion = client.completions.create(
+        completion = client.chat.completions.create(
             model="llama3-8b-8192" ,
             messages=[
                 {"role": "user", "content":
          prompt}
             ]
         )
-        return completion.choices[0].messages.content
+        return completion.choices[0].message.content
     except Exception as e:
         return f"AI gặp lỗi: {e}"
 def tom_tat_3_y(cau_tra_loi: str):
@@ -49,7 +49,7 @@ def tom_tat_3_y(cau_tra_loi: str):
          prompt}
             ]
         )
-        return res.output_text
+        return res.choices[0].message.content
     except:
         return None
    
@@ -101,7 +101,7 @@ def tao_trac_nghiem_tu_AI(noi_dung):
     """
 
     try:
-        res = client.responses.create(
+        res = client.chat.completions.create(
             model="llama3-8b-8192",
            messages=[
                 {"role": "user", "content":
@@ -109,7 +109,7 @@ def tao_trac_nghiem_tu_AI(noi_dung):
             ]
         )
 
-        text = res.choices[0].messages.content.strip()
+        text = res.choices[0].message.content.strip()
 
         # 👉 LẤY PHẦN JSON CHO CHẮC
         start = text.find("[")
