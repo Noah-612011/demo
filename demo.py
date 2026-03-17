@@ -20,7 +20,7 @@ def save_score(name, score):
         "score": score
     })
 
-    data = sorted(data, key=lambda x:x["score"], reserve=True)
+    data = sorted(data, key=lambda x:x["score"], revervse=True)
 
     with open("leaderboard.json", "w") as f:
         json.dump(data, f)
