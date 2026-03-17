@@ -357,18 +357,10 @@ if st.session_state.page == "ask":
             st.stop()
             
         with st.spinner("📜 Trợ lý đang tra cứu lịch sử..."):
-        
-        analysis_placeholder = st.empty()
-        analysis_placeholder.markdown(
-            '<div class="analysis-box">📜 Trợ lý lịch sử đang phân tích...</div>',
-            unsafe_allow_html=True
-        )
-
         tra_loi = tra_loi_lich_su(cau_hoi)
         if tra_loi is None:
             tra_loi = tra_loi_AI_lich_su(cau_hoi)
-
-        analysis_placeholder.empty()
+            
         st.success(tra_loi)
 
         # 📌 Ghi nhớ nhanh
