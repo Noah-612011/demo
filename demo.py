@@ -5,6 +5,7 @@ import base64
 import streamlit.components.v1 as components
 import json
 from groq import Groq
+import time
 def bong_bong_bay():
     st.balloons()
    
@@ -357,6 +358,7 @@ if st.session_state.page == "ask":
             st.stop()
             
         with st.spinner("📜 Trợ lý đang tra cứu lịch sử..."):
+            time.sleep(2)  # test loading
             tra_loi = tra_loi_lich_su(cau_hoi)
         if tra_loi is None:
             tra_loi = tra_loi_AI_lich_su(cau_hoi)
