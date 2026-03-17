@@ -6,7 +6,6 @@ import streamlit.components.v1 as components
 import json
 from groq import Groq
 import time
-import json
 
 def save_score(name, score):
     try:
@@ -39,8 +38,12 @@ client = Groq(api_key=st.secrets["GROQ_API_KEY"])
 
 def tra_loi_AI_lich_su(cau_hoi: str):
     prompt = (
-        "Bạn là trợ lý chuyên về lịch sử. "
-        "Hãy trả lời ngắn gọn, chính xác và không nói lan man.\n"
+        "Bạn là trợ lý giúp mọi người hiểu lịch sử một cách đơn giản và thú vị. "
+        "Hãy trả lời:\n"
+        "- Ngắn gọn\n"
+        "- Dễ hiểu cho mọi người\n"
+        "- Có thể giải thích đơn giản nếu cần\n"
+        "- Không lan man, không dùng từ quá khó\n"
         f"Câu hỏi: {cau_hoi}\nTrả lời:"
     )
     try:
@@ -57,7 +60,7 @@ def tra_loi_AI_lich_su(cau_hoi: str):
 def tom_tat_3_y(cau_tra_loi: str):
     prompt = (
         "Hãy tóm tắt nội dung lịch sử sau thành 3 ý ngắn gọn, "
-        "mỗi ý 1 dòng, không lan man:\n"
+        "dễ hiểu cho mọi người, mỗi ý 1 đòng:\n"
         f"{cau_tra_loi}"
     )
     try:
