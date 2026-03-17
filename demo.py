@@ -535,8 +535,7 @@ if st.session_state.page == "quiz":
         st.subheader("🏆 Bảng xếp hạng")
 
         for i, user in enumerate(data[:5]):
-            st.write("f"{i+1}. {user['name']} -
-        {user['score']} điểm")
+            st.write(f"{i+1}. {user['name']} - {user['score']} điểm")
         # 🔙 QUAY LẠI
         if st.button("🔙 Quay lại hỏi bài"):
             st.session_state.page = "ask"
