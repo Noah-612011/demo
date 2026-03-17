@@ -26,7 +26,7 @@ def tra_loi_AI_lich_su(cau_hoi: str):
     )
     try:
         completion = client.chat.completions.create(
-            model="llama3-70b-8192" ,
+            model="llama-3.1-8b-instant" ,
             messages=[
                 {"role": "user", "content":
          prompt}
@@ -43,7 +43,7 @@ def tom_tat_3_y(cau_tra_loi: str):
     )
     try:
         res = client.chat.completions.create(
-            model="llama3-70b-8192",
+            model="llama-3.1-8b-instant",
               messages=[
                 {"role": "user", "content":
          prompt}
@@ -102,7 +102,7 @@ def tao_trac_nghiem_tu_AI(noi_dung):
 
     try:
         res = client.chat.completions.create(
-            model="llama3-70b-8192",
+            model="llama-3.1-8b-instant",
            messages=[
                 {"role": "user", "content":
          prompt}
