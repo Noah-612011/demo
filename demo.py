@@ -6,6 +6,25 @@ import streamlit.components.v1 as components
 import json
 from groq import Groq
 import time
+import json
+
+def save_score(name, score):
+    try:
+        with open("leaderboard.json", "r")
+as f:
+            data = json.load(f)
+    except:
+        data = []
+
+    data.append({
+        "name": name,
+        "score": score
+    })
+
+    data = sorted(data, key=lambda x:x["score"], reserve=True)
+
+    with open("leaderboard.json", "w") as f:
+        json.dump(data, f)
 def bong_bong_bay():
     st.balloons()
    
@@ -422,6 +441,7 @@ if st.session_state.page == "quiz":
         st.rerun()
 
     st.divider()
+    player_name = st.text_input("👤 Nhập tên của bạn:")
     st.markdown("### ✏️ Trả lời các câu hỏi sau:")
 
     # ===== HIỂN THỊ CÂU HỎI =====
@@ -485,6 +505,12 @@ if st.session_state.page == "quiz":
         # Hiển thị kết quả
         st.success(f"🎉 Bạn đúng {score // 10}/{len(st.session_state.quiz_data)} câu!")
 
+        # 👉 LƯU ĐIỂM VÀO LEADERBOARD
+        if player_name:
+            save_score(player_name, score // 10)
+        else:
+            st.warning("⚠️ Nhập tên để lưu điểm!")
+
         # Danh hiệu
         if score == len(st.session_state.quiz_data) * 10:
             st.success("🏆 DANH HIỆU: NHÀ SỬ HỌC NHÍ")
@@ -500,6 +526,18 @@ if st.session_state.page == "quiz":
                 st.session_state.page = "review_wrong"
                 st.rerun()
 
+        # 🏆 Bảng xếp hạng
+        try:
+            with open("leaderboard.json", "r") as f:
+                data = json.load(f)
+        except:
+            data = []
+
+        st.subheader("🏆 Bảng xếp hạng")
+
+        for i, user in enumerate(data[:5]):
+            st.write(f"{i+1}. {user['name']} -
+        {user['score']} điểm")
         # 🔙 QUAY LẠI
         if st.button("🔙 Quay lại hỏi bài"):
             st.session_state.page = "ask"
