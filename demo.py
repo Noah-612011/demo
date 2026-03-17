@@ -10,8 +10,7 @@ import json
 
 def save_score(name, score):
     try:
-        with open("leaderboard.json", "r")
-as f:
+        with open("leaderboard.json", "r") as f:
             data = json.load(f)
     except:
         data = []
